@@ -1,0 +1,206 @@
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
+public class test {
+    public static void main(String[] args) throws IOException {
+        HashMap<String, Manager> userMap = new HashMap();
+        HashMap<String, Subway> ditieMap = new HashMap();
+        method(userMap);
+        method2(ditieMap);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("请输入管理人员工号");
+        String nameID = sc.next();
+        if (userMap.containsKey(nameID)) {
+            System.out.println("该工号不存在");
+        } else {
+
+
+            System.out.println("登录成功");
+            System.out.println("1.查看地铁站 2.添加地铁站");
+            System.out.println("请选择步骤");
+            String a = sc.next();
+            switch (a) {
+                case "1":
+                    if (ditieMap.isEmpty()) {
+                        System.out.println("当前没有地铁站信息");
+
+                    } else {
+                        Set<String> strings = ditieMap.keySet();
+                        for (String key : strings) {
+                            Subway subway = ditieMap.get(key);
+                            System.out.println( subway.toString());
+                        }
+                    }
+
+                    break;
+                case "2":
+                    System.out.println("请输入地铁站编号");
+                    String id=sc.next();
+                    System.out.println("请输入地铁站名称");
+                    String mingc=sc.next();
+                    System.out.println("请输入地铁站路线");
+                    String luxian=sc.next();
+                    Subway arr=new Subway(id,mingc,luxian);
+                    ditieMap.put(id,arr);
+                    BufferedWriter bw=new BufferedWriter(new FileWriter("D:\\桌面\\subways.txt"));
+                    Set<Map.Entry<String, Subway>> entries = ditieMap.entrySet();
+                    for (Map.Entry<String, Subway> entry : entries) {
+                        Subway value = entry.getValue();
+                        bw.write(value.toString());
+                        bw.newLine();
+
+                    }
+bw.close();
+                    break;
+                case "3":
+                    System.out.println("感谢您的使用");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("您的输入有误，请重新输入");
+                    break;
+
+            }
+
+        }
+
+    }
+
+    private static void method2(HashMap<String, Subway> ditieMap) throws IOException {
+        BufferedReader br1 = new BufferedReader(new FileReader("D:\\桌面\\subways.txt"));
+        String line1;
+        while ((line1 = br1.readLine())!= null) {
+            String[] split1 = line1.split(",");
+            String a=split1[0];
+            String b=split1[1];
+            String c=split1[2];
+
+            Subway AM = new Subway(a,b,c);
+            ditieMap.put(split1[0], AM);
+        }
+
+        br1.close();
+    }
+
+    private static void method(HashMap<String, Manager> userMap) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("D:\\桌面\\managers.txt"));
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] split1 = line.split(",");
+            Manager AM = new Manager(split1[0], split1[1], split1[2], split1[3]);
+            userMap.put(split1[0], AM);
+        }
+        br.close();
+    }
+}
+
+class Manager {
+    private String gonghao;
+    private String name;
+    private String sex;
+    private String phonenumber;
+
+    public Manager() {
+    }
+
+    public Manager(String gonghao, String name, String sex, String phonenumber) {
+        this.gonghao = gonghao;
+        this.name = name;
+        this.sex = sex;
+        this.phonenumber = phonenumber;
+    }
+
+    public String getGonghao() {
+        return gonghao;
+    }
+
+    public void setGonghao(String gonghao) {
+        this.gonghao = gonghao;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "gonghao='" + gonghao + '\'' +
+                ", name='" + name + '\'' +
+                ", sex='" + sex + '\'' +
+                ", phonenumber='" + phonenumber + '\'' +
+                '}';
+    }
+}
+
+class Subway {
+    private String ditieID;
+    private String ditieNAME;
+    private String ditieluxian;
+
+    public Subway() {
+    }
+
+    public Subway(String ditieID, String ditieNAME, String ditieluxian) {
+        this.ditieID = ditieID;
+        this.ditieNAME = ditieNAME;
+        this.ditieluxian = ditieluxian;
+    }
+
+    public String getDitieID() {
+        return ditieID;
+    }
+
+    public void setDitieID(String ditieID) {
+        this.ditieID = ditieID;
+    }
+
+    public String getDitieNAME() {
+        return ditieNAME;
+    }
+
+    public void setDitieNAME(String ditieNAME) {
+        this.ditieNAME = ditieNAME;
+    }
+
+    public String getDitieluxian() {
+        return ditieluxian;
+    }
+
+    public void setDitieluxian(String ditieluxian) {
+        this.ditieluxian = ditieluxian;
+    }
+
+    @Override
+    public String toString() {
+        return  ditieID + '\''
+                 + ditieNAME + '\''
+                + ditieluxian + '\''
+                ;
+    }
+}
+
+
